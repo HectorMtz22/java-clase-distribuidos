@@ -1,18 +1,17 @@
 package act1;
 
 public class Lanzador {
-
-	// Read all numbers and put it in an array
-	LeerNumeros myInput = new LeerNumeros();
-	int[] numeros = myInput.getNumeros();
-	int length = myInput.getLength();
 	double finalRes = 0;
 
 	// Number of threads
 	int numeroThreads;
+	int[] numeros;
+	int length;
 	
-	public Lanzador(int numeroThreads) {
+	public Lanzador(int numeroThreads, int[] numeros, int length) {
 		this.numeroThreads = numeroThreads;
+		this.numeros = numeros;
+		this.length = length;
 	}
 	
 	public long getTime() {
@@ -28,12 +27,16 @@ public class Lanzador {
 			prom[i].start();
 		}
 		// Wait all threads
+		int index = 0;
+		int threadsCompletados = 0;
 		while (true) {
-			int threadsCompletados = 0;
-			for (int i = 0; i < numeroThreads; i++) {
-				if (!prom[i].isAlive()) threadsCompletados++;
-			}
+			if (!prom[index].isAlive()) threadsCompletados++;
 			if (threadsCompletados == numeroThreads) break;
+			index++;
+			if (index >= numeroThreads) {
+				index = 0;
+				threadsCompletados = 0;
+			}
 		}
 		// When all threads finish
 		for (int i = 0; i < numeroThreads; i++) {
