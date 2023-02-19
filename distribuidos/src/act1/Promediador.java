@@ -21,4 +21,8 @@ public class Promediador extends Thread {
 		//System.out.println("Hilo " + id + " suma: " + suma + " y promedio " + res);
 	}
 	
+	public double getSuma() {
+		return res;
+	}
+	
 }

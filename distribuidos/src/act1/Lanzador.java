@@ -40,7 +40,7 @@ public class Lanzador {
 		}
 		// When all threads finish
 		for (int i = 0; i < numeroThreads; i++) {
-			finalRes += prom[i].res;
+			finalRes += prom[i].getSuma();
 		}
 		finalRes /= length;
 		long fin = System.nanoTime();
@@ -48,7 +48,7 @@ public class Lanzador {
 		System.out.println("Hilos usados: " + numeroThreads);
 		System.out.println("La cantidad de números es: " + length);
 		System.out.println("El promedio total es: " + finalRes);		
-		System.out.println("Lo que se tardo fue: " + (fin - inicio) + " nanoseg.");
+		System.out.println("Lo que se tardo fue: " + (fin - inicio) + " nanoseg.\n");
 		
 		return fin - inicio;
 	}
