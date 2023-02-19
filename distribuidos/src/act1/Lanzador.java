@@ -1,27 +1,43 @@
 package act1;
 
-import java.util.Arrays;
-
 public class Lanzador {
 	public static void main(String[] args) {
+		// Read all numbers and put it in an array
 		LeerNumeros myInput = new LeerNumeros();
 		int[] numeros = myInput.getNumeros();
 		int length = myInput.getLength();
-		int pasos = Math.round(length / 4);
-		Promediador prom1 = new Promediador(0, Arrays.copyOfRange(numeros, 0, pasos));
-		Promediador prom2 = new Promediador(1, Arrays.copyOfRange(numeros, pasos + 1, pasos * 2));
-		Promediador prom3 = new Promediador(2, Arrays.copyOfRange(numeros, pasos * 2 + 1, pasos * 3));
-		Promediador prom4 = new Promediador(3, Arrays.copyOfRange(numeros, pasos * 3 + 1, pasos * 4));
+
+		double finalRes = 0;
+		
+		// Number of threads
+		int numeroThreads = 4;
+		
+		int pasos = Math.round(length / numeroThreads);		
+		Promediador[] prom = new Promediador[numeroThreads];
+		
 		long inicio = System.nanoTime();
-		prom4.start();
-		prom1.start();
-		prom2.start();
-		prom3.start();
-		// Wait all 
-		while (prom1.isAlive() || prom2.isAlive() || prom3.isAlive() || prom4.isAlive());			
+
+		for (int i = 0; i < numeroThreads; i++) {
+			int from = i * pasos;
+			prom[i] = new Promediador(i, numeros, from, from + pasos); 
+			prom[i].start();
+		}
+		// Wait all threads
+
+		while (true) {
+			int threadsCompletados = 0;
+			for (int i = 0; i < numeroThreads; i++) {
+				if (!prom[i].isAlive()) threadsCompletados++;
+			}
+			if (threadsCompletados == numeroThreads) break;
+		}
+		// When all threads finish
+		for (int i = 0; i < numeroThreads; i++) {
+			finalRes += prom[i].res;
+		}
+		finalRes /= numeroThreads;
 		long fin = System.nanoTime();
-		double finalRes = (prom1.res + prom2.res + prom3.res + prom4.res) / 4;
-			
+		
 		System.out.println("La cantidad de números es: " + length);
 		System.out.println("El promedio total es: " + finalRes);		
 		System.out.println("Lo que se tardo fue: " + (fin - inicio) + " nanoseg.");
