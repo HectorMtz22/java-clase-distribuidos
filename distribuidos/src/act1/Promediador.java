@@ -17,7 +17,7 @@ public class Promediador extends Thread {
 		for (int i = from; i < to; i++) {
 			suma += data[i];
 		}
-		res = suma / (to - from);
+		res = suma;
 		//System.out.println("Hilo " + id + " suma: " + suma + " y promedio " + res);
 	}
 	
